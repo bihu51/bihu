@@ -1,0 +1,150 @@
+{pc:content action="category" catid="0" num="25" siteid="$siteid" order="listorder ASC"}
+<a href="{siteurl($siteid)}">首页</a>
+{loop $data $r}<!--  一级栏目循环开始  -->
+<a href="{$r[url]}">{$r[catname]}</a>
+ 
+{if $r[child]} <!--是否有子栏目-->
+{pc:content action="category" catid="$r[catid]" num="15" siteid="$siteid" order="listorder ASC" return="data2"}
+        {loop $data2 $v}<!--子栏目循环开始-->
+        <a href="{$v[url]}">{$v[catname]}</a>
+        {/loop}<!--子栏目循环结束-->
+{/pc}
+{/if}
+{/loop}<!--  一级栏目循环结束-->
+{/pc}
+
+    <!--
+            <li> <a href="about.html">关于公司</a> </li>
+            <li> <a href="services.html">公司业务</a> </li>
+             
+			--> 
+			<li> <a href="portfolio.html"> 作品展示 </a>
+              <ul class="dropdown animated-3s fadeIn">
+			    {if $r[child]} <!--是否有子栏目-->
+				{pc:content action="category" catid="$r[catid]" num="15" siteid="$siteid" order="listorder ASC" return="data2"}
+				{loop $data2 $v}<!--子栏目循环开始-->
+				<li><a href="{$v[url]}">{$v[catname]}</a> </li>
+				<!--
+                <li> <a href="portoflio_1.html">portoflio 1</a> </li>
+                <li> <a href="portoflio_2.html">portoflio 2</a> </li>
+                <li> <a href="portoflio_3.html">portoflio 3</a> </li>
+				-->
+				{/loop}<!--子栏目循环结束-->
+              </ul>
+            </li>
+            
+			
+			
+            
+			
+			<li> <a href="blog.html">公司博客</a> </li>
+            <li> <a href="contact.html">联系方式</a> </li>
+
+			-->
+			{/pc}
+{/if}
+
+
+
+{pc:content action="category" catid="0" num="25" siteid="$siteid" order="listorder ASC"}
+<a href="{siteurl($siteid)}">首页</a>
+{loop $data $r}<!--  一级栏目循环开始  -->
+<a href="{$r[url]}">{$r[catname]}</a>
+ 
+{if $r[child]} <!--是否有子栏目-->
+{pc:content action="category" catid="$r[catid]" num="15" siteid="$siteid" order="listorder ASC" return="data2"}
+        {loop $data2 $v}<!--子栏目循环开始-->
+        <a href="{$v[url]}">{$v[catname]}</a>
+        {/loop}<!--子栏目循环结束-->
+{/pc}
+{/if}
+{/loop}<!--  一级栏目循环结束-->
+{/pc}
+
+
+
+<ul>
+{pc:content action="category" catid="0" num="25" siteid="$siteid" order="listorder ASC"}
+        <li><a {if empty($catid)}class="h-nav-current"{/if} href="{siteurl($siteid)}">多元速首页</a></li>
+        {loop $data $r}<!--  一级栏目循环开始  -->
+        <li><a {if $r['catid'] == $catid || $CATEGORYS[$CAT[parentid]][catid]==$r['catid']}class="h-nav-current" {/if} href="{$r[url]}">{$r[catname]}</a>
+            {if $r[arrchildid]} <!--是否有子栏目-->
+                <ul>
+                {pc:content action="category" catid="$r[catid]" num="15" siteid="$siteid" order="listorder ASC" return="data2"}
+                        {loop $data2 $v}<!--子栏目循环开始-->
+                        <li><a href="{$v[url]}">{$v[catname]}</a></li>
+                        {/loop}<!--子栏目循环结束-->
+                {/pc}
+                </ul>
+            {/if}
+        </li>
+        {/loop}<!--  一级栏目循环结束-->
+        {/pc}
+</ul>
+
+
+
+{if $r[arrchildid]} <!--是否有子栏目-->
+             <li>  <a href="{$r[url]}">{$r[catname]}</a><li>
+			{if $r[child]} <!--是否有子栏目-->
+        {pc:content action="category" catid="$r[catid]" num="15" siteid="$siteid" order="listorder ASC" return="data2"}
+              <ul class="dropdown animated-3s fadeIn">
+                 {loop $data2 $v}<!--子栏目循环开始-->
+				 <li><a href="{$v[url]}">{$v[catname]}</a> </li>
+        
+				{/loop}<!--子栏目循环结束-->
+              </ul>
+           {/pc}
+{/if}
+   
+			</li>
+ 
+
+{/loop}<!--  一级栏目循环结束-->
+{/pc}
+          </ul>
+
+
+
+    <!-- FACTS -->
+    <section class="facts parallax-bg padding-top-150 padding-bottom-150" data-stellar-background-ratio="0.5">
+      <div class="container"> 
+        
+        <!-- Heading -->
+        <div class="heading text-center white">
+          <h4>Fun FActs</h4>
+          <span>Don't Be Vague</span>
+          <hr>
+        </div>
+        <div class="row"> 
+          <!-- Team Member -->
+          <div class="col-md-3 margin-bottom-30"> <i class="icon-anchor"></i>
+            <div class="fats-conter"> <span class="number"> <span class="timer" data-speed="2000" data-refresh-interval="100" data-to="35" data-from="0">500 </span> </span>
+              <h5>Project Completed</h5>
+            </div>
+          </div>
+          
+          <!-- Line Of Codes -->
+          <div class="col-md-3 margin-bottom-30"> <i class="icon-pencil"></i>
+            <div class="fats-conter"> <span class="number"> <span class="timer" data-speed="2000" data-refresh-interval="100" data-to="5225" data-from="0">254 </span> </span>
+              <h5>Line Of Codes</h5>
+            </div>
+          </div>
+          
+          <!-- Satisfied Client -->
+          <div class="col-md-3  margin-bottom-30"> <i class="icon-heart"></i>
+            <div class="fats-conter"> <span class="number"> <span class="timer" data-speed="2000" data-refresh-interval="100" data-to="4977" data-from="0">184 </span> </span>
+              <h5>Happy Clients</h5>
+            </div>
+          </div>
+          
+          <!-- PSD file included -->
+          <div class="col-md-3 margin-bottom-30"> <i class="icon-bike"></i>
+            <div class="fats-conter"> <span class="number"> <span class="timer" data-speed="2000" data-refresh-interval="100" data-to="178" data-from="0">35k </span> </span>
+              <h5>Km Drive</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+	

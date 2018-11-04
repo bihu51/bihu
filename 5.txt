@@ -1,0 +1,186 @@
+title标题
+    {if isset($SEO['title']) && !empty($SEO['title'])}{$SEO['title']}{/if}{$SEO['site_title']}
+
+    {$SEO['keyword']}　　{$SEO['description']}
+
+
+调用头部和尾部
+    {template "content","header"}
+    {template "content","footer"}
+
+栏目名称(根据栏目catid获取)
+    {$CATEGORYS[$catid][catname]}
+    {$CAT[catname]}
+    {$CAT[letter]},{$CAT[url]}
+
+调用具体单独栏目下的链接和名称(单独形式)
+    {$CATEGORYS[10][url]}
+    {$CATEGORYS[10][catname]}
+
+添加栏目处调用栏目的名称(catname)，图片(img)，描述(description)
+    {$CATEGORYS[10][catname]}
+    {$CATEGORYS[10][image]}
+    {$CATEGORYS[10][description]}
+
+父级栏目名称和链接
+  {$CATEGORYS[$CAT[parentid]][catname]}
+  {$CATEGORYS[$CAT[parentid]][url]}
+
+网站首页 
+    {siteurl($siteid)}
+
+站点域名
+    {APP_PATH} ====> http://localhost/test/
+
+当前位置 面包屑 
+    {catpos($catid)}  去掉最后的">"标签  {preg_replace('/( \> )$/', '', catpos($catid))}
+
+内容详情页标签内容调用 show_xxx.html
+    {$title} {$inputtime} {$copyfrom} {$content} {$thumb}  {$url}获取当前页面URL
+
+时间戳代码
+    {date('Y-m-d H:i:s',$r[inputtime])}
+
+截取字符个数
+    {str_cut($r[title],33)}
+    {str_cut(strip_tags($val[content]),400,"")}... (注：去掉HTML标签,一个中文字占3个字节)
+    {str_cut(strip_tags($r[content]),320)}
+
+
+———————————————————————————
+SQL替换链接语句(上线相关路径替换)
+    update v9_category set thumb=REPLACE (thumb,"http://localhost/jinxun/","http://test.test520.com/")
+
+data出来的东西有
+    [id]=>1 [catid]=>9   [typeid]=>0    [title]=>高级美容老师   [style]=>     [thumb]=>5        [keywords]=>2 
+    [description]=>   [posids]=>0    [url]=>'http://www.baidu.com'           [listorder]=>0       [status]=>99   
+    [sysadd]=>     [islink]=>0       [username]=>admin     [inputtime]=>13424324      [updatetime]=>136534534
+
+—————————————————————————————
+
+同级栏目列表
+    {pc:content action="category" catid="$parentid" num="12" siteid="$siteid" order="listorder ASC"}
+        {loop $data $r}
+        {/loop}
+    {/pc}
+
+一级父栏目列表
+    {pc:content action="category" catid="0" num="8" siteid="$siteid" order="listorder ASC"}
+        {loop $data $r}
+        {/loop}
+    {/pc}
+     
+调用一级级栏目下的二级栏目(侧边栏列表的形式)
+    {pc:content action="category" siteid="1" catid="父级栏目id" }
+        {loop $data $n $r}
+            {$r['url']} {$r['catname']}
+        {/loop}
+    {/pc}
+
+调用一级栏目同时调用二级栏目
+    <ul class="s_mu">
+            {pc:content action="category" siteid="1" catid="33" }
+              {loop $data $n $r}
+                <li>
+                    <h4><a>{$r['catname']}</a></h4>
+                    <p>
+            {pc:content action="category" catid="$n" num="3"siteid="$siteid"order="listorder ASC"}
+              {loop $data $n $r}
+                   <a href="{$r['url']}">{$r['catname']}</a>
+              {/loop}
+            {/pc}
+                   </p>
+               </li>
+           {/loop}
+          {/pc}
+   </ul>
+——————————————————————————
+list展示内容列表
+    {pc:content action="lists" catid="$catid" num="25" order="id DESC" page="$page" moreinfo="1"}
+    {loop $data $r}
+           {$r['url']}超链接,    {$r['title']}标题,   {date('Y-m-d H:i:s',$r[inputtime])}发布时间,   {$pages}分页
+    {/loop}
+    {/pc}
+
+list页调用下载地址的方法
+    {pc:content action="lists" catid="23" order="id DESC" thumb="" moreinfo="1" page="$page" num="15"}
+        {loop $data  $r}
+        {php $xiazai = string2array($r['downfiles']);}
+            {loop $xiazai $b}
+                 <a href="{$b[fileurl]}">下载</a>
+             {/loop}
+        {/loop}
+    {/pc}
+
+—————————————————————————
+
+show详情页调用图片模型组图
+    {loop $pictureurls $pic_k $r}
+        {$r[url]}图片地址      <img src={thumb($r[url],1000,1370,0)}/> 缩略图        {$r[alt]}图片描述
+    {/loop}
+
+list页面调用图片模型组图
+    {pc:content action="lists" catid="$catid" num="1" order="id DESC" page="$page" moreinfo="1"}
+        {loop $data $r}
+            <ul class="gallery piclist">
+              {loop string2array($r['pictureurls']) $pic_k $v}
+               <li><a href="{$v['url']}" rel="prettyPhoto[]"><img src="{$v['url']}" /></a></li>
+                 {/loop}
+            </ul>
+        {/loop}
+    {/pc}
+
+———————————————————————
+首页推荐代码
+
+    {php $where = "catid IN (25,26,20,21) "}
+    {pc:content action="position" posid="2" catid="" where="$where" order="id DESC" num="6"}
+        {loop $data $n $r}
+        {/loop}
+    {/pc}
+
+友情链接
+    {pc:link action="type_list" siteid="$siteid" order="listorder DESC" num="8" return="dat"}
+        {loop $dat $r}
+           {$r['url']},{$r['logo']},{$r['']},{$r['name']}
+        {/loop}
+    {/pc}
+
+随机文章代码
+    {pc:content action="lists" catid="10" num="10" order="rand()" return="info"}
+        {loop $info $v}
+            {$v['url']} {$v['title']}
+        {/loop}
+  {/pc}
+
+——————————————————————————
+
+单页调用父级内容
+    {pc:get sql="select * from youg_page where catid=$n"}
+    {loop $data $key $val}
+        {$val[content]}
+    {/loop}
+    {/pc}
+
+栏目里的内容页从第几个开始
+    {pc:content action="lists" catid="10" order="id DESC LIMIT 1,4--" num="4"}
+
+————————————————————————————
+
+get自定义标签
+  {php $city=$_GET['city']}
+  {pc:get sql="select * from table where catid=10 and city='$city' order by id dsc limit 0,1--" num="1"}
+    {loop $data $r} 
+    {/loop}
+  {/pc}
+
+
+首页广告处banner图片调用
+
+    {pc:get sql="SELECT setting FROM v9_poster WHERE spaceid = 11 AND type='images' AND disabled=0 ORDER BY listorder ASC" num="3"}
+    {loop $data $r}
+  <?php $str='$arr='.$r[setting].';';  eval($str);?>
+
+　　{$arr[1][linkurl]}超链接      {$arr[1][imageurl]}图片     {$arr[1][alt]}标题
+    {/loop}
+    {/pc}
